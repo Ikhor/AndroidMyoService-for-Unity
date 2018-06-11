@@ -10,7 +10,7 @@ android {
             java {
                 srcDir 'src/main/java'
             }
-            copy{
+            copy {
                 from(zipTree("libs/myo.jar"))
                 into("src/main/resources")
             }

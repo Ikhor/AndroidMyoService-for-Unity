@@ -2,26 +2,20 @@ package com.strieg.myoplugin;
 
 /**
  * Created by florian strieg on 20.08.2015.
+ * Updated by Ikhor on 06.11.2017
  */
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.os.Binder;
 
 import com.thalmic.myo.Hub;
 
 public class MyoBackgroundService extends Service {
     private final IBinder mBinder = new LocalBinder();
     private AndroidDeviceHandler mListener = new AndroidDeviceHandler();
-
-    public class LocalBinder extends Binder {
-        MyoBackgroundService getService() {
-            // Return this instance of LocalService so clients can call public methods
-            return MyoBackgroundService.this;
-        }
-    }
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -54,17 +48,25 @@ public class MyoBackgroundService extends Service {
         Hub.getInstance().shutdown();
     }
 
-    public void attachToAdjacent(){
+    public void attachToAdjacent() {
         Hub.getInstance().attachToAdjacentMyo();
         Log.e("MyoTag", "Waiting for Myo");
     }
 
-    public void attachByMacAddress(String mac){
+    public void attachByMacAddress(String mac) {
         Hub.getInstance().attachByMacAddress(mac);
     }
-    public void vibrate(int length){
+
+    public void vibrate(int length) {
         Log.e("MyoTag", "Vibrate called.");
         mListener.vibrate(length);
+    }
+
+    public class LocalBinder extends Binder {
+        MyoBackgroundService getService() {
+            // Return this instance of LocalService so clients can call public methods
+            return MyoBackgroundService.this;
+        }
     }
 }
 

@@ -2,6 +2,7 @@ package com.strieg.myoplugin;
 
 /**
  * Created by florian strieg on 20.08.2015.
+ * Updated by Ikhor on 06.11.2017
  */
 
 import android.app.Activity;
@@ -16,7 +17,9 @@ public class MyoStarter {
     MyoBackgroundService mService;
     boolean mBound = false;
 
-    /** Defines callbacks for service binding, passed to bindService() */
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
     private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
@@ -36,7 +39,7 @@ public class MyoStarter {
         }
     };
 
-    public void launchService(Activity root){
+    public void launchService(Activity root) {
         Intent intent = new Intent(root, MyoBackgroundService.class);
         root.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
         Log.e("MyoTag", "Binding Started.");
@@ -49,13 +52,13 @@ public class MyoStarter {
         }
     }
 
-    public void attachToAdjacent(){
+    public void attachToAdjacent() {
         if (mBound) {
             mService.attachToAdjacent();
         }
     }
 
-    public void attachByMacAddress(String mac){
+    public void attachByMacAddress(String mac) {
         if (mBound) {
             mService.attachByMacAddress(mac);
         }

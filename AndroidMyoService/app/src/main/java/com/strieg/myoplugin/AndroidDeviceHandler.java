@@ -2,6 +2,7 @@ package com.strieg.myoplugin;
 
 /**
  * Created by florian strieg on 10.09.2015.
+ * Updated by Ikhor on 06.11.2017
  */
 
 import com.thalmic.myo.AbstractDeviceListener;
@@ -12,10 +13,21 @@ import com.thalmic.myo.Quaternion;
 import com.thalmic.myo.Vector3;
 import com.thalmic.myo.XDirection;
 import com.unity3d.player.UnityPlayer;
-//import org.json.*;
 
 public class AndroidDeviceHandler extends AbstractDeviceListener {
     private Myo myo;
+
+    private static Myo.VibrationType getType(int x) {
+        switch (x) {
+            case 0:
+                return Myo.VibrationType.SHORT;
+            case 1:
+                return Myo.VibrationType.MEDIUM;
+            case 2:
+                return Myo.VibrationType.LONG;
+        }
+        return null;
+    }
 
     @Override
     public void onAttach(Myo myo, long timestamp) {
@@ -72,29 +84,23 @@ public class AndroidDeviceHandler extends AbstractDeviceListener {
         UnityPlayer.UnitySendMessage("MyoAndroidManager", "OnOrientationData", quaternion);
     }
 
-    /*@Override
-    public void onAccelerometerData (Myo myo, long timestamp, Vector3 accel){}
-
     @Override
-    public void onGyroscopeData (Myo myo, long timestamp, Vector3 gyro){}
-
+    public void onAccelerometerData(Myo myo, long timestamp, Vector3 accel) {
+        String acellData = String.valueOf(accel.x()) + "," + String.valueOf(accel.y()) + "," + String.valueOf(accel.z());
+        UnityPlayer.UnitySendMessage("MyoAndroidManager", "onAccelerometerData", acellData);
+    }
+    /*
     @Override
     public void onRssi (Myo myo, long timestamp, int rssi){}*/
 
-    public void vibrate(int length){
-        Myo.VibrationType type = getType(length);
-        if(type != null) myo.vibrate(type);
+    @Override
+    public void onGyroscopeData(Myo myo, long timestamp, Vector3 gyro) {
+        String gyroData = String.valueOf(gyro.x()) + "," + String.valueOf(gyro.y()) + "," + String.valueOf(gyro.z());
+        UnityPlayer.UnitySendMessage("MyoAndroidManager", "onGyroscopeData", gyroData);
     }
 
-    private static Myo.VibrationType getType(int x) {
-        switch(x) {
-            case 0:
-                return Myo.VibrationType.SHORT;
-            case 1:
-                return Myo.VibrationType.MEDIUM;
-            case 2:
-                return Myo.VibrationType.LONG;
-        }
-        return null;
+    public void vibrate(int length) {
+        Myo.VibrationType type = getType(length);
+        if (type != null) myo.vibrate(type);
     }
 }
